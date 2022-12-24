@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import {
-  getAuth,
-  signInWithRedirect,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 
 // config is form the projects page on Firebase in the settings
@@ -25,15 +20,17 @@ const firebaseConfig = {
 // firebase/app - initialize firebase/app with the config settings from our app
 const firebaseApp = initializeApp(firebaseConfig);
 // firebase/auth - create a provider which is specific to each item (button, page, etc)
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 // set the parameters
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
 export const auth = getAuth();
 // Firebase/auth - export the sign-in to be used
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+
 // firebase/firestore to select our database
 export const db = getFirestore(); // directly points to our database
 // function that when given the user auth, gets a snapshot of the data
