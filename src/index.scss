@@ -3,8 +3,8 @@
 }
 
 body {
+  font-family: 'Roboto', 'Sans Serif';
   margin: 0;
-  font-family: 'Unbounded', sans-serif;
 }
 
 code {
@@ -15,4 +15,8 @@ code {
 a {
   text-decoration: none;
   color: black;
+}
+
+button {
+  font-family: 'Roboto';
 }

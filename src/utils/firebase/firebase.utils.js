@@ -3,6 +3,7 @@ import {
   getAuth,
   signInWithPopup,
   GoogleAuthProvider,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
@@ -23,6 +24,7 @@ const firebaseConfig = {
 };
 
 // firebase/app - initialize firebase/app with the config settings from our app
+// A Firebase App is a container-like object that stores common configuration and shares authentication across Firebase services. After you initialize a Firebase App object in your code, you can add and start using Firebase services.
 const firebaseApp = initializeApp(firebaseConfig);
 // firebase/auth - create a provider which is specific to each item (button, page, etc)
 const googleProvider = new GoogleAuthProvider();
@@ -31,6 +33,7 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
+// Auth is an instance of the curent user that has signed in /Signed up
 export const auth = getAuth();
 // Firebase/auth - export the function to create the (userAuth) to be used to get the userDocRef
 export const signInWithGooglePopup = () =>
@@ -74,4 +77,10 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 
   return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await signInWithEmailAndPassword(auth, email, password);
 };
