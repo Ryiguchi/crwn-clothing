@@ -1,11 +1,13 @@
 import { useState } from 'react';
+
+import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
 } from '../../utils/firebase/firebase.utils';
-import FormInput from '../form-input/form-input.component';
+
 import './sign-up-form.styles.scss';
-import Button from '../button/button.component';
 
 // set an object with useState when it will be tied together with some specific logic like to use in a handler for a submit form
 const defaultFormFields = {
