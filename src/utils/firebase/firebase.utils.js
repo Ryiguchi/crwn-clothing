@@ -90,5 +90,7 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth);
 
+// callback is like the handler
+// this is like the subscriber published model
 export const onAuthStateChangedListener = callback =>
   onAuthStateChanged(auth, callback);

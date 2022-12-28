@@ -56,7 +56,7 @@ const SignInForm = () => {
       <span>Sign in with your email and password</span>
       <form onSubmit={handleSubmit}>
         <FormInput
-          label="email"
+          label="Email"
           type="email"
           required={true}
           onChange={handleChange}
@@ -64,7 +64,7 @@ const SignInForm = () => {
           value={email}
         ></FormInput>
         <FormInput
-          label="password"
+          label="Password"
           type="password"
           required
           onChange={handleChange}
