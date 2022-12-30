@@ -1,12 +1,14 @@
-.category-container {
+import styled from 'styled-components';
+
+export const CategoryContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   row-gap: 50px;
   column-gap: 20px;
-}
+`;
 
-.category-title {
+export const CategoryTitleH2 = styled.h2`
   font-size: 38px;
   margin-bottom: 25px;
   text-align: center;
-}
+`;

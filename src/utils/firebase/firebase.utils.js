@@ -53,25 +53,25 @@ export const signInWithGooglePopup = () =>
 // firebase/firestore to select our database
 export const db = getFirestore(); // directly points to our database
 
-export const addCollectionAndDocuments = async (
-  collectionKey,
-  objectsToAdd
-) => {
-  // returns existing or creates new collectionRef
-  const collectionRef = collection(db, collectionKey);
+// export const addCollectionAndDocuments = async (
+//   collectionKey,
+//   objectsToAdd
+// ) => {
+//   // returns existing or creates new collectionRef
+//   const collectionRef = collection(db, collectionKey);
 
-  // 1 transaction is 1 unit of work
-  // 1 unit of work can be many 'writes'
-  // if 1 write fails, the whole transaction fails
-  //writeBatch will return a batch instance for our db
-  const batch = writeBatch(db);
-  objectsToAdd.forEach(object => {
-    const docRef = doc(collectionRef, object.title.toLowerCase());
-    batch.set(docRef, object);
-  });
+//   // 1 transaction is 1 unit of work
+//   // 1 unit of work can be many 'writes'
+//   // if 1 write fails, the whole transaction fails
+//   //writeBatch will return a batch instance for our db
+//   const batch = writeBatch(db);
+//   objectsToAdd.forEach(object => {
+//     const docRef = doc(collectionRef, object.title.toLowerCase());
+//     batch.set(docRef, object);
+//   });
 
-  await batch.commit();
-};
+//   await batch.commit();
+// };
 
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, 'categories');
