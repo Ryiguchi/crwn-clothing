@@ -8,7 +8,16 @@ import {
   signOut,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from 'firebase/firestore';
 
 // config is form the projects page on Firebase in the settings
 const firebaseConfig = {
@@ -43,6 +52,42 @@ export const signInWithGooglePopup = () =>
 
 // firebase/firestore to select our database
 export const db = getFirestore(); // directly points to our database
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  // returns existing or creates new collectionRef
+  const collectionRef = collection(db, collectionKey);
+
+  // 1 transaction is 1 unit of work
+  // 1 unit of work can be many 'writes'
+  // if 1 write fails, the whole transaction fails
+  //writeBatch will return a batch instance for our db
+  const batch = writeBatch(db);
+  objectsToAdd.forEach(object => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories');
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
+
 // function that when given the user auth, gets a snapshot of the data
 export const createUserDocumentFromAuth = async (
   userAuth,
@@ -50,6 +95,7 @@ export const createUserDocumentFromAuth = async (
 ) => {
   if (!userAuth) return;
   // firebase/auth - gets the document in the database
+  //Even if there is no user, Firestore  will return an empty one
   const userDocRef = doc(db, 'users', userAuth.uid);
 
   // firebase/auth - getDoc gets the data from the document - has special methods
