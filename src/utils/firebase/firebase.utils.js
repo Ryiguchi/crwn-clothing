@@ -78,7 +78,13 @@ export const getCategoriesAndDocuments = async () => {
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
 };
 
 // function that when given the user auth, gets a snapshot of the data
@@ -131,5 +137,5 @@ export const signOutUser = async () => await signOut(auth);
 
 // callback is like the handler
 // this is like the subscriber published model
-export const onAuthStateChangedListener = callback =>
+export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 
+// form of the cartContext
 export const CartContext = createContext({
   isCartOpen: false,
   setIsCartOpen: () => {},
@@ -11,13 +12,14 @@ export const CartContext = createContext({
   cartTotal: 0,
 });
 
+// helper functions
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
-    cartItem => cartItem.id === productToAdd.id
+    (cartItem) => cartItem.id === productToAdd.id
   );
 
   if (existingCartItem) {
-    return cartItems.map(cartItem =>
+    return cartItems.map((cartItem) =>
       cartItem.id === productToAdd.id
         ? { ...cartItem, quantity: cartItem.quantity + 1 }
         : cartItem
@@ -29,22 +31,23 @@ const addCartItem = (cartItems, productToAdd) => {
 
 const removeCartItem = (cartItems, cartItemToRemove) => {
   const existingCartItem = cartItems.find(
-    cartItem => cartItem.id === cartItemToRemove.id
+    (cartItem) => cartItem.id === cartItemToRemove.id
   );
 
   if (existingCartItem.quantity === 1) {
-    return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id);
+    return cartItems.filter((cartItem) => cartItem.id !== cartItemToRemove.id);
   }
 
-  return cartItems.map(cartItem =>
+  return cartItems.map((cartItem) =>
     cartItem.id === cartItemToRemove.id
       ? { ...cartItem, quantity: cartItem.quantity - 1 }
       : cartItem
   );
 };
 
-const clearCartItem = (cartItems, cartItemToClear) =>
-  cartItems.filter(cartItem => cartItem.id !== cartItemToClear.id);
+const clearCartItem = (cartItems, cartItemToClear) => {
+  return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
+};
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -66,18 +69,19 @@ export const CartProvider = ({ children }) => {
     setCartTotal(newCartTotal);
   }, [cartItems]);
 
-  const addItemToCart = productToAdd => {
+  const addItemToCart = (productToAdd) => {
     setCartItems(addCartItem(cartItems, productToAdd));
   };
 
-  const removeItemFromCart = cartItemToRemove => {
+  const removeItemFromCart = (cartItemToRemove) => {
     setCartItems(removeCartItem(cartItems, cartItemToRemove));
   };
 
-  const clearItemFromCart = cartItemToClear => {
+  const clearItemFromCart = (cartItemToClear) => {
     setCartItems(clearCartItem(cartItems, cartItemToClear));
   };
 
+  //
   const value = {
     isCartOpen,
     setIsCartOpen,

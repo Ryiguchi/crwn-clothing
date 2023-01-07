@@ -1,12 +1,11 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import CartIcon from '../../components/cart-icon/cart-icon.component';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
-import { selectCurrrentUser } from '../../store/user/user.selector';
-import { selectIsCartOpen } from '../../store/cart/cart.selector';
+import { CartContext } from '../../contexts/cart.context';
+import { UserContext } from '../../contexts/user.context';
 
 import { signOutUser } from '../../utils/firebase/firebase.utils';
 
@@ -19,9 +18,8 @@ import {
 } from './navigation.styles';
 
 const Navigation = () => {
-  // a change in useContext, as a hook (logging in from the sign-in component by using setCurrentUser which triggers useState), tells react to re-render (run this function)
-  const currentUser = useSelector(selectCurrrentUser);
-  const isCartOpen = useSelector(selectIsCartOpen);
+  const { currentUser } = useContext(UserContext);
+  const { isCartOpen } = useContext(CartContext);
 
   return (
     <Fragment>
