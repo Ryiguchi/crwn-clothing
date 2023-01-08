@@ -1,15 +1,13 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
-import {
-  createAuthUserWithEmailAndPassword,
-  createUserDocumentFromAuth,
-} from '../../utils/firebase/firebase.utils';
+
+import { signUpStart } from '../../store/user/user.action';
 
 import { SignUpContainer } from './sign-up-form.styles';
 
-// set an object with useState when it will be tied together with some specific logic like to use in a handler for a submit form
 const defaultFormFields = {
   displayName: '',
   email: '',
@@ -18,8 +16,8 @@ const defaultFormFields = {
 };
 
 const SignUpForm = () => {
-  // useState only hooks to 1 value but you can use an object with all values
-  // its argument is the initial value
+  const dispatch = useDispatch();
+
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
@@ -27,19 +25,14 @@ const SignUpForm = () => {
     setFormFields(defaultFormFields);
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert('Passwords don"t match');
       return;
     }
     try {
-      const { user } = await createAuthUserWithEmailAndPassword(
-        email,
-        password
-      );
-
-      await createUserDocumentFromAuth(user, { displayName });
+      dispatch(signUpStart(email, password, displayName));
 
       resetFormFields();
     } catch (err) {
@@ -49,7 +42,7 @@ const SignUpForm = () => {
     }
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     // spread in the whole object and then modify one value []
     setFormFields({ ...formFields, [name]: value });
