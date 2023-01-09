@@ -34,20 +34,16 @@ const PaymentForm = () => {
     // request to get payment intent
     // fetch the route relative to your app URL
     const response = await fetch('/.netlify/functions/create-payment-intent', {
-      method: 'POST',
+      method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ amount: amount * 100 }),
-    });
-    console.log(response);
-    // .then((res) => res.json());
+    }).then((res) => res.json());
 
-    const {
-      paymentIntent: { client_secret },
-    } = response;
+    const clientSecret = response.paymentIntent.client_secret;
 
-    console.log(client_secret);
+    console.log(clientSecret);
 
-    const paymentResult = await stripe.confirmCardPayment(client_secret, {
+    const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: elements.getElement(CardElement),
         billing_details: {
@@ -55,7 +51,7 @@ const PaymentForm = () => {
         },
       },
     });
-
+    console.log(paymentResult);
     setIsProcessingPayment(false);
 
     if (paymentResult.error) {
@@ -71,7 +67,7 @@ const PaymentForm = () => {
     <PaymentFormContainer>
       <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment: </h2>
-        <CardElement></CardElement>
+        <CardElement />
         <PaymentButton
           isLoading={isProcessingPayment}
           button-type={BUTTON_TYPE_CLASSES.inverted}
