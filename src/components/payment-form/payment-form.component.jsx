@@ -6,9 +6,12 @@ import { selectCartTotal } from '../../store/cart/cart.selectors';
 import { selectCurrentUser } from '../../store/user/user.selector';
 
 import { BUTTON_TYPE_CLASSES } from '../button/button.component';
-import { PaymentButton } from './payment-form.styles';
 
-import { PaymentFormContainer, FormContainer } from './payment-form.styles';
+import {
+  PaymentFormContainer,
+  FormContainer,
+  PaymentButton,
+} from './payment-form.styles';
 
 const PaymentForm = () => {
   const stripe = useStripe();
@@ -31,15 +34,15 @@ const PaymentForm = () => {
     // request to get payment intent
     // fetch the route relative to your app URL
     const response = await fetch(
-      '/netlify/functions/create-payment-intent.js',
+      '/.netlify/functions/create-payment-intent.js',
       {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: amount * 100 }),
       }
-    ).then((res) => res.json());
+    );
+    console.log(response);
+    // .then((res) => res.json());
 
     const {
       paymentIntent: { client_secret },
