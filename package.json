@@ -25,7 +25,6 @@
     "reselect": "^4.1.7",
     "sass": "^1.57.1",
     "sort-by": "^1.2.0",
-    "stripe": "^11.6.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
   },

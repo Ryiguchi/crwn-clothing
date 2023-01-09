@@ -33,14 +33,11 @@ const PaymentForm = () => {
 
     // request to get payment intent
     // fetch the route relative to your app URL
-    const response = await fetch(
-      '/.netlify/functions/create-payment-intent.js',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: amount * 100 }),
-      }
-    );
+    const response = await fetch('/.netlify/functions/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: amount * 100 }),
+    });
     console.log(response);
     // .then((res) => res.json());
 
@@ -74,7 +71,7 @@ const PaymentForm = () => {
     <PaymentFormContainer>
       <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment: </h2>
-        <CardElement />
+        <CardElement></CardElement>
         <PaymentButton
           isLoading={isProcessingPayment}
           button-type={BUTTON_TYPE_CLASSES.inverted}
