@@ -5,10 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../button/button.component';
 import CartItem from '../cart-item/cart-item.component';
 
-import {
-  selectIsCartOpen,
-  selectCartItems,
-} from '../../store/cart/cart.selectors';
+import { selectCartItems } from '../../store/cart/cart.selectors';
 import { setIsCartOpen } from '../../store/cart/cart.action';
 
 import {
@@ -21,7 +18,6 @@ const CartDropdown = () => {
   const dispatch = useDispatch();
 
   const cartItems = useSelector(selectCartItems);
-  const isCartOpen = useSelector(selectIsCartOpen);
 
   const navigate = useNavigate();
 

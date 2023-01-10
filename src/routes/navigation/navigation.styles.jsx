@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { ReactComponent as UserLogo } from '../../assets/user.svg';
 
 export const NavigationContainer = styled.div`
   height: 70px;
@@ -27,4 +28,9 @@ export const NavLink = styled(Link)`
   text-transform: uppercase;
   padding: 10px 15px;
   cursor: pointer;
+`;
+
+export const StyledUserLogo = styled(UserLogo)`
+  cursor: pointer;
+  margin-right: 5px;
 `;

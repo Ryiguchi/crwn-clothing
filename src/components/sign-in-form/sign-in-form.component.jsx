@@ -4,6 +4,10 @@ import { useDispatch } from 'react-redux';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 import FormInput from '../form-input/form-input.component';
 
+import { useSelector } from 'react-redux';
+
+import { selectCurrentUser } from '../../store/user/user.selector';
+
 import {
   googleSignInStart,
   emailSignInStart,

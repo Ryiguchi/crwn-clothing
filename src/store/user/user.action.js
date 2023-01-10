@@ -41,3 +41,30 @@ export const signOutSuccess = () =>
 
 export const signOutFailed = (error) =>
   createAction(USER_ACTION_TYPES.SIGN_OUT_FAILED, error);
+
+export const setIsUserMenuOpen = (bool) =>
+  createAction(USER_ACTION_TYPES.SET_IS_USER_MENU_OPEN, bool);
+
+export const changeDisplayNameStart = (user, newName) =>
+  createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_START, {
+    user,
+    newName,
+  });
+
+export const changeDisplayNameSuccess = (newName) =>
+  createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_SUCCESS, newName);
+
+export const changeDisplayNameFailed = (error) =>
+  createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_FAILED, error);
+
+export const changeUserSettingsMenu = (menu) =>
+  createAction(USER_ACTION_TYPES.SET_USER_SETTINGS_MENU, menu);
+
+export const changeUserEmailStart = (email) =>
+  createAction(USER_ACTION_TYPES.SET_USER_EMAIL_START, email);
+
+export const changeUserEmailSuccess = (email) =>
+  createAction(USER_ACTION_TYPES.SET_USER_EMAIL_SUCCESS, email);
+
+export const changeUserEmailFailed = (error) =>
+  createAction(USER_ACTION_TYPES.SET_USER_EMAIL_FAILED, error);

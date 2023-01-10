@@ -7,6 +7,12 @@ import {
   signUpFailed,
   signOutSuccess,
   signOutFailed,
+  setIsUserMenuOpen,
+  changeDisplayNameFailed,
+  changeDisplayNameSuccess,
+  changeUserEmailFailed,
+  changeUserEmailSuccess,
+  checkUserSession,
 } from './user.action';
 
 import { USER_ACTION_TYPES } from './user.types';
@@ -18,6 +24,8 @@ import {
   signInAuthUserWithEmailAndPassword,
   createAuthUserWithEmailAndPassword,
   signOutUser,
+  changeUserDisplayName,
+  changeUserEmail,
 } from '../../utils/firebase/firebase.utils';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
@@ -27,7 +35,6 @@ export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
       userAuth,
       additionalInfo
     );
-    console.log(userSnapshot.data());
     yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
   } catch (error) {
     yield put(signInFailed(error));
@@ -48,6 +55,7 @@ export function* signInWithGoogle() {
   try {
     const { user } = yield call(signInWithGooglePopup);
     yield call(getSnapshotFromUserAuth, user);
+    yield put(checkUserSession());
   } catch (error) {
     yield put(signInFailed(error));
   }
@@ -87,8 +95,27 @@ export function* signOut() {
   try {
     yield call(signOutUser);
     yield put(signOutSuccess());
+    yield put(setIsUserMenuOpen(false));
   } catch (error) {
     yield put(signOutFailed(error));
+  }
+}
+
+export function* changeDisplayName({ payload: { user, newName } }) {
+  try {
+    yield call(changeUserDisplayName, user, newName);
+    yield put(changeDisplayNameSuccess(newName));
+  } catch (error) {
+    yield put(changeDisplayNameFailed(error));
+  }
+}
+
+export function* changeEmail({ payload: { email } }) {
+  try {
+    yield call(changeUserEmail, email);
+    yield put(changeUserEmailSuccess(email));
+  } catch (error) {
+    yield put(changeUserEmailFailed(error));
   }
 }
 
@@ -114,10 +141,19 @@ export function* onSignUpSuccess() {
 }
 
 export function* onSignOutStart() {
-  console.log('out');
   yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
 }
 
+export function* onSetUserDisplayName() {
+  yield takeLatest(
+    USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_START,
+    changeDisplayName
+  );
+}
+
+export function* onChangeUserEmailStart() {
+  yield takeLatest(USER_ACTION_TYPES.SET_USER_EMAIL_START, changeEmail);
+}
 //
 export function* userSaga() {
   yield all([
@@ -127,5 +163,7 @@ export function* userSaga() {
     call(onSignUpStart),
     call(onSignUpSuccess),
     call(onSignOutStart),
+    call(onSetUserDisplayName),
+    call(onChangeUserEmailStart),
   ]);
 }
