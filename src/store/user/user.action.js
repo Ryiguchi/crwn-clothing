@@ -60,8 +60,8 @@ export const changeDisplayNameFailed = (error) =>
 export const changeUserSettingsMenu = (menu) =>
   createAction(USER_ACTION_TYPES.SET_USER_SETTINGS_MENU, menu);
 
-export const changeUserEmailStart = (email) =>
-  createAction(USER_ACTION_TYPES.SET_USER_EMAIL_START, email);
+export const changeUserEmailStart = (user, email) =>
+  createAction(USER_ACTION_TYPES.SET_USER_EMAIL_START, { user, email });
 
 export const changeUserEmailSuccess = (email) =>
   createAction(USER_ACTION_TYPES.SET_USER_EMAIL_SUCCESS, email);

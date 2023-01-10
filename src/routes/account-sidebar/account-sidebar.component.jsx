@@ -1,3 +1,7 @@
+import { useSelector } from 'react-redux';
+
+import { selectUserSettingsMenu } from '../../store/user/user.selector';
+
 import {
   StyledCaretIcon,
   MenuContainer,
@@ -5,17 +9,27 @@ import {
 } from './account-sidebar.styles';
 
 const AccountSidebar = ({ callBack }) => {
+  const activeMenu = useSelector(selectUserSettingsMenu);
+
   return (
     <MenuContainer>
-      <MenuItem onClick={() => callBack('changeName')}>
+      <MenuItem
+        activeMenu={activeMenu}
+        name="changeName"
+        onClick={() => callBack('changeName')}
+      >
         Change display name
         <StyledCaretIcon />
       </MenuItem>
-      <MenuItem onClick={() => callBack('changeEmail')}>
-        Change email adddress
+      <MenuItem
+        activeMenu={activeMenu}
+        name="changeEmail"
+        onClick={() => callBack('changeEmail')}
+      >
+        Change email
         <StyledCaretIcon />
       </MenuItem>
-      <MenuItem>
+      <MenuItem activeMenu={activeMenu} name="changePassword">
         Change password
         <StyledCaretIcon />
       </MenuItem>

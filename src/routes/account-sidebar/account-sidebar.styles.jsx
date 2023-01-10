@@ -25,7 +25,7 @@ export const MenuItem = styled(Link)`
   cursor: pointer;
 
   border-left: ${(props) =>
-    props.name === props.activeMenu ? '2px solid #000' : 'none'};
+    props.name === props.activeMenu ? '2px solid #000' : '2px solid #fff'};
 `;
 
 export const StyledCaretIcon = styled(CaretRightIcon)``;

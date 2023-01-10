@@ -69,6 +69,7 @@ export function* signInWithEmail({ payload: { email, password } }) {
       password
     );
     yield call(getSnapshotFromUserAuth, user);
+    yield put(checkUserSession());
   } catch (error) {
     yield put(signInFailed(error));
   }
@@ -89,6 +90,7 @@ export function* signUp({ payload: { email, password, displayName } }) {
 
 export function* signInAfterSignUp({ payload: { user, additionalInfo } }) {
   yield call(getSnapshotFromUserAuth, user, additionalInfo);
+  yield put(checkUserSession());
 }
 
 export function* signOut() {
@@ -110,9 +112,9 @@ export function* changeDisplayName({ payload: { user, newName } }) {
   }
 }
 
-export function* changeEmail({ payload: { email } }) {
+export function* changeEmail({ payload: { user, email } }) {
   try {
-    yield call(changeUserEmail, email);
+    yield call(changeUserEmail, user, email);
     yield put(changeUserEmailSuccess(email));
   } catch (error) {
     yield put(changeUserEmailFailed(error));

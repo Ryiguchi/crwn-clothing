@@ -21,13 +21,11 @@ const ChangeEmail = () => {
 
   const changeEmail = (e) => {
     e.preventDefault();
-    console.log(currentUser, email);
 
-    dispatch(changeUserEmailStart(email));
+    dispatch(changeUserEmailStart(currentUser, email));
   };
 
   const handleChange = (e) => {
-    console.log(e.target);
     const { name, value } = e.target;
 
     setFormField({ [name]: value });
@@ -38,6 +36,7 @@ const ChangeEmail = () => {
     <>
       <Form onSubmit={changeEmail}>
         <FormInput
+          type="email"
           label="New email address"
           required
           name="email"

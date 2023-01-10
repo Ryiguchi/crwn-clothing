@@ -7,6 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  updateEmail,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -71,19 +72,19 @@ export const createUserDocumentFromAuth = async (
 
   // firebase/auth - getDoc gets the data from the document - has special methods
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userSnapshot);
+  console.log(userAuth.providerData[0].providerId);
 
   // if it is a new user, there won't be a userSnapshot
   if (!userSnapshot.exists()) {
-    console.log('none');
     const { displayName, email } = userAuth;
     const createdAt = new Date();
-
+    const { providerId } = userAuth.providerData[0];
     try {
       await setDoc(userDocRef, {
         displayName,
         email,
         createdAt,
+        providerId,
         ...additionalInfo,
       });
     } catch (error) {
@@ -129,19 +130,25 @@ export const getCurrentUser = () => {
 
 export const changeUserDisplayName = async (user, newName) => {
   const userDocRef = doc(db, 'users', auth.currentUser.uid);
-  console.log(userDocRef);
   try {
     await setDoc(userDocRef, { ...user, displayName: newName });
+    alert('Your display name has been successfully updated.');
   } catch (error) {
     alert('There was an error changing your display name!');
   }
 };
 
-export const changeUserEmail = async (email) => {
-  const userDocRef = doc(db, 'users', auth.currentUser.uid);
+export const changeUserEmail = async (user, email) => {
+  const auth = getAuth();
+
   try {
-    await setDoc(userDocRef, { email }, { merge: true });
+    if (user.providerId === 'google.com')
+      throw new Error(
+        'You can not change the email address of an account created with Google!'
+      );
+    updateEmail(auth.currentUser, email);
+    alert('Your email address has been successfully updated.');
   } catch (error) {
-    alert('There was an error changing your display name!');
+    alert(error.message);
   }
 };
