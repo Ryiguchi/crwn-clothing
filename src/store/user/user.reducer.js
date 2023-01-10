@@ -30,6 +30,7 @@ export const userReducer = (state = INITIAL_USER_STATE, action = {}) => {
     case USER_ACTION_TYPES.SIGN_UP_FAILED:
     case USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_FAILED:
     case USER_ACTION_TYPES.SET_USER_EMAIL_FAILED:
+    case USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED:
       return {
         ...state,
         error: payload,

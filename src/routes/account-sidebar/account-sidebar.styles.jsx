@@ -9,8 +9,7 @@ export const MenuContainer = styled.div`
   flex-direction: column;
   gap: 16px;
 
-  width: 25%;
-  max-width: 250px;
+  width: 250px;
 
   margin-top: 60px;
 `;
@@ -20,12 +19,12 @@ export const MenuItem = styled(Link)`
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  padding: 10px;
+  padding: 20px;
 
   cursor: pointer;
 
   border-left: ${(props) =>
-    props.name === props.activeMenu ? '2px solid #000' : '2px solid #fff'};
+    props.name === props.activemenu ? '2px solid #000' : '2px solid #fff'};
 `;
 
 export const StyledCaretIcon = styled(CaretRightIcon)``;

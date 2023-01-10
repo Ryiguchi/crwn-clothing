@@ -13,6 +13,7 @@ import {
   changeUserEmailFailed,
   changeUserEmailSuccess,
   checkUserSession,
+  changePasswordFailed,
 } from './user.action';
 
 import { USER_ACTION_TYPES } from './user.types';
@@ -26,6 +27,8 @@ import {
   signOutUser,
   changeUserDisplayName,
   changeUserEmail,
+  reauthenticate,
+  updateUserPassword,
 } from '../../utils/firebase/firebase.utils';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
@@ -121,6 +124,14 @@ export function* changeEmail({ payload: { user, email } }) {
   }
 }
 
+export function* changePassword({ payload: { oldPassword, newPassword } }) {
+  try {
+    yield call(reauthenticate, oldPassword, newPassword);
+  } catch (error) {
+    yield put(changePasswordFailed(error));
+  }
+}
+
 // Entry functions
 export function* onCheckUserSession() {
   yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
@@ -156,6 +167,10 @@ export function* onSetUserDisplayName() {
 export function* onChangeUserEmailStart() {
   yield takeLatest(USER_ACTION_TYPES.SET_USER_EMAIL_START, changeEmail);
 }
+
+export function* onChangePasswordStart() {
+  yield takeLatest(USER_ACTION_TYPES.CHANGE_PASSWORD_START, changePassword);
+}
 //
 export function* userSaga() {
   yield all([
@@ -167,5 +182,6 @@ export function* userSaga() {
     call(onSignOutStart),
     call(onSetUserDisplayName),
     call(onChangeUserEmailStart),
+    call(onChangePasswordStart),
   ]);
 }

@@ -14,7 +14,7 @@ const AccountSidebar = ({ callBack }) => {
   return (
     <MenuContainer>
       <MenuItem
-        activeMenu={activeMenu}
+        activemenu={activeMenu}
         name="changeName"
         onClick={() => callBack('changeName')}
       >
@@ -22,14 +22,18 @@ const AccountSidebar = ({ callBack }) => {
         <StyledCaretIcon />
       </MenuItem>
       <MenuItem
-        activeMenu={activeMenu}
+        activemenu={activeMenu}
         name="changeEmail"
         onClick={() => callBack('changeEmail')}
       >
         Change email
         <StyledCaretIcon />
       </MenuItem>
-      <MenuItem activeMenu={activeMenu} name="changePassword">
+      <MenuItem
+        activemenu={activeMenu}
+        name="changePassword"
+        onClick={() => callBack('changePassword')}
+      >
         Change password
         <StyledCaretIcon />
       </MenuItem>

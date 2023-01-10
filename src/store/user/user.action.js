@@ -68,3 +68,15 @@ export const changeUserEmailSuccess = (email) =>
 
 export const changeUserEmailFailed = (error) =>
   createAction(USER_ACTION_TYPES.SET_USER_EMAIL_FAILED, error);
+
+export const changePasswordStart = (oldPassword, newPassword) =>
+  createAction(USER_ACTION_TYPES.CHANGE_PASSWORD_START, {
+    oldPassword,
+    newPassword,
+  });
+
+export const changePasswordSuccess = () =>
+  createAction(USER_ACTION_TYPES.CHANGE_PASSWORD_SUCCESS);
+
+export const changePasswordFailed = (error) =>
+  createAction(USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED, error);

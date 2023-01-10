@@ -8,6 +8,9 @@ import {
   signOut,
   onAuthStateChanged,
   updateEmail,
+  reauthenticateWithCredential,
+  updatePassword,
+  EmailAuthProvider,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -72,7 +75,6 @@ export const createUserDocumentFromAuth = async (
 
   // firebase/auth - getDoc gets the data from the document - has special methods
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userAuth.providerData[0].providerId);
 
   // if it is a new user, there won't be a userSnapshot
   if (!userSnapshot.exists()) {
@@ -146,9 +148,25 @@ export const changeUserEmail = async (user, email) => {
       throw new Error(
         'You can not change the email address of an account created with Google!'
       );
-    updateEmail(auth.currentUser, email);
+    await updateEmail(auth.currentUser, email);
     alert('Your email address has been successfully updated.');
   } catch (error) {
     alert(error.message);
+  }
+};
+
+export const reauthenticate = async (oldPassword, newPassword) => {
+  const auth = getAuth();
+  const { currentUser } = auth;
+  const { email } = currentUser;
+
+  const credential = EmailAuthProvider.credential(email, oldPassword);
+
+  try {
+    await reauthenticateWithCredential(currentUser, credential);
+    await updatePassword(currentUser, newPassword);
+    alert('Your password has been successfully changed.');
+  } catch (error) {
+    alert('A problem occured while trying to change your password');
   }
 };
