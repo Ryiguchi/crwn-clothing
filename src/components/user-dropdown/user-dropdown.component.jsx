@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../button/button.component';
@@ -14,10 +15,14 @@ import { ReactComponent as OrderIcon } from '../../assets/bag.svg';
 
 const UserDropdown = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const isUserMenuOpen = useSelector(selectIsUserMenuOpen);
 
-  const signOutUser = () => dispatch(signOutStart());
+  const signOutUser = () => {
+    dispatch(signOutStart());
+    navigate('/');
+  };
 
   const toggleIsUserMenuOpen = () =>
     dispatch(setIsUserMenuOpen(!isUserMenuOpen));
