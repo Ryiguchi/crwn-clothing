@@ -1,9 +1,14 @@
 import { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCartTotal } from '../../store/cart/cart.selectors';
+import {
+  selectCartTotal,
+  selectCartItems,
+} from '../../store/cart/cart.selectors';
 import { selectCurrentUser } from '../../store/user/user.selector';
+
+import { saveOrderStart } from '../../store/user/user.action';
 
 import { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
@@ -14,15 +19,22 @@ import {
 } from './payment-form.styles';
 
 const PaymentForm = () => {
+  const dispatch = useDispatch();
+
   const stripe = useStripe();
+
   const elements = useElements();
+
   const amount = useSelector(selectCartTotal);
   const currentUser = useSelector(selectCurrentUser);
+  const cartItems = useSelector(selectCartItems);
+
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   const paymentHandler = async (e) => {
     // prevent default form behavior
     e.preventDefault();
+    console.log(currentUser.email);
 
     // check to make sure there is a registered instance of stripe and elements
     if (!stripe || !elements) return;
@@ -36,12 +48,13 @@ const PaymentForm = () => {
     const response = await fetch('/.netlify/functions/create-payment-intent', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: amount * 100 }),
+      body: JSON.stringify({
+        amount: amount * 100,
+        email: currentUser.email,
+      }),
     }).then((res) => res.json());
 
     const clientSecret = response.paymentIntent.client_secret;
-
-    console.log(clientSecret);
 
     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -50,8 +63,8 @@ const PaymentForm = () => {
           name: currentUser ? currentUser.displayName : 'guest',
         },
       },
+      setup_future_usage: 'off_session',
     });
-    console.log(paymentResult);
     setIsProcessingPayment(false);
 
     if (paymentResult.error) {
@@ -59,6 +72,21 @@ const PaymentForm = () => {
     } else {
       if (paymentResult.paymentIntent.status === 'succeeded') {
         alert('Payment successful');
+        const { id, amount } = paymentResult.paymentIntent;
+        const dateObj = new Date();
+        const date = dateObj.toString().slice(4, 15);
+        const timestamp = Date.now();
+
+        const order = {
+          id,
+          amount,
+          date,
+          timestamp,
+          numItems: cartItems.length,
+          orderItems: cartItems,
+        };
+
+        dispatch(saveOrderStart(currentUser, order));
       }
     }
   };

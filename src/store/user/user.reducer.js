@@ -2,10 +2,10 @@ import { USER_ACTION_TYPES } from './user.types';
 
 const INITIAL_USER_STATE = {
   currentUser: null,
-  isUserMenuOpen: false,
   isLoading: false,
   error: null,
   userSettingsMenu: 'changeName',
+  orderHistoryPopupItems: {},
 };
 
 export const userReducer = (state = INITIAL_USER_STATE, action = {}) => {
@@ -31,15 +31,12 @@ export const userReducer = (state = INITIAL_USER_STATE, action = {}) => {
     case USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_FAILED:
     case USER_ACTION_TYPES.SET_USER_EMAIL_FAILED:
     case USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED:
+    case USER_ACTION_TYPES.SAVE_ORDER_FAILED:
       return {
         ...state,
         error: payload,
       };
-    case USER_ACTION_TYPES.SET_IS_USER_MENU_OPEN:
-      return {
-        ...state,
-        isUserMenuOpen: payload,
-      };
+
     case USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_SUCCESS:
       return {
         ...state,
@@ -60,6 +57,20 @@ export const userReducer = (state = INITIAL_USER_STATE, action = {}) => {
           ...state.currentUser,
           email: payload,
         },
+      };
+    case USER_ACTION_TYPES.SAVE_ORDER_SUCCESS:
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          orderHistory: [...state.currentUser.orderHistory, payload],
+        },
+      };
+
+    case USER_ACTION_TYPES.SET_ORDER_HISTORY_POPUP_ITEMS:
+      return {
+        ...state,
+        orderHistoryPopupItems: payload,
       };
 
     default:

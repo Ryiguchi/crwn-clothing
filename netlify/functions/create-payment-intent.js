@@ -7,12 +7,13 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 exports.handler = async (event) => {
   try {
     // amount (currency without decimals)
-    const { amount } = JSON.parse(event.body);
+    const { amount, email } = JSON.parse(event.body);
     // sends the payment intent
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: 'usd',
       payment_method_types: ['card'],
+      receipt_email: email,
     });
 
     // returns if succeeds

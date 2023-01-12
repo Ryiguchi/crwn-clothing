@@ -7,14 +7,19 @@ import {
   signUpFailed,
   signOutSuccess,
   signOutFailed,
-  setIsUserMenuOpen,
   changeDisplayNameFailed,
   changeDisplayNameSuccess,
   changeUserEmailFailed,
   changeUserEmailSuccess,
   checkUserSession,
   changePasswordFailed,
+  saveOrderFailed,
+  saveOrderSuccess,
 } from './user.action';
+
+import { setIsUserMenuOpen } from './elements/elements.action';
+
+import { clearCart } from '../cart/cart.action';
 
 import { USER_ACTION_TYPES } from './user.types';
 
@@ -28,7 +33,7 @@ import {
   changeUserDisplayName,
   changeUserEmail,
   reauthenticate,
-  updateUserPassword,
+  saveOrderToUserFirebase,
 } from '../../utils/firebase/firebase.utils';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
@@ -132,6 +137,16 @@ export function* changePassword({ payload: { oldPassword, newPassword } }) {
   }
 }
 
+export function* saveOrderToUser({ payload: { user, order } }) {
+  try {
+    yield call(saveOrderToUserFirebase, user, order);
+    yield put(saveOrderSuccess(order));
+    yield put(clearCart());
+  } catch (error) {
+    yield put(saveOrderFailed(error));
+  }
+}
+
 // Entry functions
 export function* onCheckUserSession() {
   yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
@@ -171,6 +186,11 @@ export function* onChangeUserEmailStart() {
 export function* onChangePasswordStart() {
   yield takeLatest(USER_ACTION_TYPES.CHANGE_PASSWORD_START, changePassword);
 }
+
+export function* onSaveOrderStart() {
+  yield takeLatest(USER_ACTION_TYPES.SAVE_ORDER_START, saveOrderToUser);
+}
+
 //
 export function* userSaga() {
   yield all([
@@ -183,5 +203,6 @@ export function* userSaga() {
     call(onSetUserDisplayName),
     call(onChangeUserEmailStart),
     call(onChangePasswordStart),
+    call(onSaveOrderStart),
   ]);
 }

@@ -18,9 +18,9 @@ import {
   getDoc,
   setDoc,
   collection,
-  writeBatch,
   query,
   getDocs,
+  updateDoc,
 } from 'firebase/firestore';
 
 // config is form the projects page on Firebase in the settings
@@ -87,6 +87,7 @@ export const createUserDocumentFromAuth = async (
         email,
         createdAt,
         providerId,
+        orderHistory: [],
         ...additionalInfo,
       });
     } catch (error) {
@@ -168,5 +169,20 @@ export const reauthenticate = async (oldPassword, newPassword) => {
     alert('Your password has been successfully changed.');
   } catch (error) {
     alert('A problem occured while trying to change your password');
+  }
+};
+
+export const saveOrderToUserFirebase = async (user, order) => {
+  try {
+    const userDocRef = doc(db, 'users', auth.currentUser.uid);
+    const userOrders = user.orderHistory;
+    await updateDoc(userDocRef, {
+      ...user,
+      orderHistory: [...userOrders, order],
+    });
+  } catch (error) {
+    alert(
+      'Your order was successful but due to an error, your order maight not be visible in your order history.'
+    );
   }
 };

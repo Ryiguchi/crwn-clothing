@@ -1,5 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { createSelector, createSelectorCreator } from 'reselect';
+import { createSelector } from 'reselect';
 
 const selectCategoriesSlice = (state) => state.categories;
 

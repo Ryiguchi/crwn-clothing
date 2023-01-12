@@ -1,7 +1,4 @@
-import { CartItemContainer, Img, ItemDetails, Name } from './cart-item.styles';
-
-const CartItem = ({ cartItem, type }) => {
-  const { name, quantity, price, imageUrl } = cartItem;
+const OrderHistoryPopupItem = () => {
   return (
     <CartItemContainer>
       <Img src={imageUrl} alt={`${name}`} />
@@ -15,4 +12,4 @@ const CartItem = ({ cartItem, type }) => {
   );
 };
 
-export default CartItem;
+export default OrderHistoryPopupItem;

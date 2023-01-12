@@ -42,9 +42,6 @@ export const signOutSuccess = () =>
 export const signOutFailed = (error) =>
   createAction(USER_ACTION_TYPES.SIGN_OUT_FAILED, error);
 
-export const setIsUserMenuOpen = (bool) =>
-  createAction(USER_ACTION_TYPES.SET_IS_USER_MENU_OPEN, bool);
-
 export const changeDisplayNameStart = (user, newName) =>
   createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_START, {
     user,
@@ -80,3 +77,15 @@ export const changePasswordSuccess = () =>
 
 export const changePasswordFailed = (error) =>
   createAction(USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED, error);
+
+export const saveOrderStart = (user, order) =>
+  createAction(USER_ACTION_TYPES.SAVE_ORDER_START, { user, order });
+
+export const saveOrderSuccess = (order) =>
+  createAction(USER_ACTION_TYPES.SAVE_ORDER_SUCCESS, order);
+
+export const saveOrderFailed = (error) =>
+  createAction(USER_ACTION_TYPES.SAVE_ORDER_FAILED, error);
+
+export const setOrderHistoryPopupItems = (items) =>
+  createAction(USER_ACTION_TYPES.SET_ORDER_HISTORY_POPUP_ITEMS, items);

@@ -6,13 +6,13 @@ import CartIcon from '../../components/cart-icon/cart-icon.component';
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 import UserDropdown from '../../components/user-dropdown/user-dropdown.component';
 
-import {
-  selectCurrentUser,
-  selectIsUserMenuOpen,
-} from '../../store/user/user.selector';
-import { selectIsCartOpen } from '../../store/cart/cart.selectors';
+import { selectCurrentUser } from '../../store/user/user.selector';
+import { selectIsCartOpen } from '../../store/user/elements/elements.selector';
+import { selectIsUserMenuOpen } from '../../store/user/elements/elements.selector';
 
-import { setIsUserMenuOpen, signOutStart } from '../../store/user/user.action';
+import { signOutStart } from '../../store/user/user.action';
+import { setIsUserMenuOpen } from '../../store/user/elements/elements.action';
+
 import { ReactComponent as CrownLogo } from '../../assets/crown.svg';
 import { ReactComponent as UserLogo } from '../../assets/user.svg';
 
