@@ -1,6 +1,7 @@
 import { USER_ACTION_TYPES } from './user.types';
 
 import { createAction } from '../../utils/reducer.utils';
+import { Export } from 'phosphor-react';
 
 export const setCurrentUser = (user) =>
   createAction(USER_ACTION_TYPES.SET_CURRRET_USER, user);
@@ -89,3 +90,12 @@ export const saveOrderFailed = (error) =>
 
 export const setOrderHistoryPopupItems = (items) =>
   createAction(USER_ACTION_TYPES.SET_ORDER_HISTORY_POPUP_ITEMS, items);
+
+export const resetPasswordStart = (email) =>
+  createAction(USER_ACTION_TYPES.RESET_PASSWORD_START, email);
+
+export const resetPasswordSuccess = () =>
+  createAction(USER_ACTION_TYPES.RESET_PASSWORD_SUCCESS);
+
+export const resetPasswordFailed = (error) =>
+  createAction(USER_ACTION_TYPES.RESET_PASSWORD_FAILED, error);

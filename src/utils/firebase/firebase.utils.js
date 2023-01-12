@@ -11,6 +11,7 @@ import {
   reauthenticateWithCredential,
   updatePassword,
   EmailAuthProvider,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -184,5 +185,16 @@ export const saveOrderToUserFirebase = async (user, order) => {
     alert(
       'Your order was successful but due to an error, your order maight not be visible in your order history.'
     );
+  }
+};
+
+export const sendResetEmail = async (email) => {
+  console.log(email);
+  const auth = getAuth();
+  try {
+    await sendPasswordResetEmail(auth, email);
+    alert('The password reset email has been sent!');
+  } catch (error) {
+    alert('There was a problem sending the email. Try again.');
   }
 };

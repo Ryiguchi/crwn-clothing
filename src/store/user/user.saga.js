@@ -15,6 +15,7 @@ import {
   changePasswordFailed,
   saveOrderFailed,
   saveOrderSuccess,
+  resetPasswordFailed,
 } from './user.action';
 
 import { setIsUserMenuOpen } from './elements/elements.action';
@@ -34,6 +35,7 @@ import {
   changeUserEmail,
   reauthenticate,
   saveOrderToUserFirebase,
+  sendResetEmail,
 } from '../../utils/firebase/firebase.utils';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalInfo) {
@@ -147,6 +149,14 @@ export function* saveOrderToUser({ payload: { user, order } }) {
   }
 }
 
+export function* resetPassword({ payload }) {
+  try {
+    yield call(sendResetEmail, payload);
+  } catch (error) {
+    yield put(resetPasswordFailed(error));
+  }
+}
+
 // Entry functions
 export function* onCheckUserSession() {
   yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION, isUserAuthenticated);
@@ -191,6 +201,10 @@ export function* onSaveOrderStart() {
   yield takeLatest(USER_ACTION_TYPES.SAVE_ORDER_START, saveOrderToUser);
 }
 
+export function* onResetPasswordStart() {
+  yield takeLatest(USER_ACTION_TYPES.RESET_PASSWORD_START, resetPassword);
+}
+
 //
 export function* userSaga() {
   yield all([
@@ -204,5 +218,6 @@ export function* userSaga() {
     call(onChangeUserEmailStart),
     call(onChangePasswordStart),
     call(onSaveOrderStart),
+    call(onResetPasswordStart),
   ]);
 }

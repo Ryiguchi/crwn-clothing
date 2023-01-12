@@ -9,6 +9,7 @@ import Shop from './routes/shop/shop.component';
 import Checkout from './routes/checkout/checkout.component';
 import AccountSettings from './routes/account-settings/account-settings.component';
 import OrderHistory from './routes/order-history/order-history.component';
+import ForgotPassword from './routes/forgot-password/forgot-password.component';
 
 import { checkUserSession } from './store/user/user.action';
 
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="checkout" element={<Checkout />} />
         <Route path="account" element={<AccountSettings />} />
         <Route path="history" element={<OrderHistory />} />
+        <Route path="forgot" element={<ForgotPassword />} />
       </Route>
     </Routes>
   );

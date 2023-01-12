@@ -32,6 +32,7 @@ export const userReducer = (state = INITIAL_USER_STATE, action = {}) => {
     case USER_ACTION_TYPES.SET_USER_EMAIL_FAILED:
     case USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED:
     case USER_ACTION_TYPES.SAVE_ORDER_FAILED:
+    case USER_ACTION_TYPES.RESET_PASSWORD_FAILED:
       return {
         ...state,
         error: payload,
