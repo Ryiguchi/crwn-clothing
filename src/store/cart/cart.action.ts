@@ -1,8 +1,14 @@
 // helper functions
 import { createAction } from '../../utils/reducer.utils';
-import { CART_ACTION_TYPES } from './cart.types';
+import { CategoryItem } from '../categories/categories.types';
+import { CART_ACTION_TYPES, CartItem } from './cart.types';
 
-const addCartItem = (cartItems, productToAdd) => {
+export const  AddCartItem<T> = (cartItems: CartItem[], product: T) => CartItem[];
+
+const addCartItem: AddCartItem<T> = (
+  cartItems: CartItem[],
+  productToAdd: T
+) => {
   const existingCartItem = cartItems.find(
     (cartItem) => cartItem.id === productToAdd.id
   );

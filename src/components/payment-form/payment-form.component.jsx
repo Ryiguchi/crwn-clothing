@@ -16,7 +16,16 @@ import {
   PaymentFormContainer,
   FormContainer,
   PaymentButton,
-} from './payment-form.styles';
+} from './payment-form.styles';´
+
+export type Order = {
+  id: string;
+  amount: Number;
+  date: string;
+  timestamp: Number;
+  numItems: Number;
+  orderItems: CartItem[]
+}
 
 const PaymentForm = () => {
   const dispatch = useDispatch();

@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { CategoryItem } from './categories.types';
 
 const selectCategoriesSlice = (state) => state.categories;
 

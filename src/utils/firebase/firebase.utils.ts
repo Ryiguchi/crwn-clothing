@@ -12,6 +12,9 @@ import {
   updatePassword,
   EmailAuthProvider,
   sendPasswordResetEmail,
+  Auth,
+  User,
+  NextOrObserver,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -22,7 +25,14 @@ import {
   query,
   getDocs,
   updateDoc,
+  writeBatch,
+  QueryDocumentSnapshot,
 } from 'firebase/firestore';
+import { Order } from '../../components/payment-form/payment-form.component';
+import {
+  Category,
+  CategoryItem,
+} from '../../store/categories/categories.types';
 
 // config is form the projects page on Firebase in the settings
 const firebaseConfig = {
@@ -39,7 +49,7 @@ const firebaseConfig = {
   appId: '1:182947838073:web:d1e3740c7eb30d6bd0fca8',
 };
 
-const firebaseApp = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 const googleProvider = new GoogleAuthProvider();
 
@@ -56,19 +66,52 @@ export const signInWithGooglePopup = () =>
 // firebase/firestore to select our database
 export const db = getFirestore(); // directly points to our database
 
-export const getCategoriesAndDocuments = async () => {
+export type ObjectToAdd = {
+  title: string;
+};
+
+export const addCollectionAndDocuments = async <T extends ObjectToAdd>(
+  collectionKey: string,
+  objectsToAdd: T[]
+): Promise<void> => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+};
+
+export const getCategoriesAndDocuments = async (): Promise<Category[]> => {
   const collectionRef = collection(db, 'categories');
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+  return querySnapshot.docs.map(
+    (docSnapshot) => docSnapshot.data() as Category
+  );
+};
+
+export type AdditionalInfo = {
+  displayName?: string;
+};
+
+export type CurrentUser = {
+  displayName: string;
+  email: string;
+  providerId?: string;
+  createdAt: Date;
+  orderHistory: Order[];
 };
 
 // function that when given the user auth, gets a snapshot of the data
 export const createUserDocumentFromAuth = async (
-  userAuth,
-  additionalInfo = {}
-) => {
+  userAuth: User,
+  additionalInfo = {} as AdditionalInfo
+): Promise<void | QueryDocumentSnapshot<UserData>> => {
   if (!userAuth) return;
   // firebase/auth - gets the document in the database
   //Even if there is no user, Firestore  will return an empty one
@@ -96,17 +139,23 @@ export const createUserDocumentFromAuth = async (
     }
   }
 
-  return userSnapshot;
+  return userSnapshot as QueryDocumentSnapshot<UserData>;
 };
 
 // this will take the email and password and return an authUser object
-export const createAuthUserWithEmailAndPassword = async (email, password) => {
+export const createAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
 
   return await createUserWithEmailAndPassword(auth, email, password);
 };
 
-export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+export const signInAuthUserWithEmailAndPassword = async (
+  email: string,
+  password: string
+) => {
   if (!email || !password) return;
 
   return await signInWithEmailAndPassword(auth, email, password);
@@ -116,10 +165,11 @@ export const signOutUser = async () => await signOut(auth);
 
 // callback is like the handler
 // this is like the subscriber published model
-export const onAuthStateChangedListener = (callback) =>
+export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
   onAuthStateChanged(auth, callback);
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (): Promise<User | null> => {
+  const auth = getAuth();
   return new Promise((resolve, reject) => {
     const unsubscribe = onAuthStateChanged(
       auth,
@@ -132,8 +182,12 @@ export const getCurrentUser = () => {
   });
 };
 
-export const changeUserDisplayName = async (user, newName) => {
-  const userDocRef = doc(db, 'users', auth.currentUser.uid);
+export const changeUserDisplayName = async (
+  user: User,
+  newName: string
+): Promise<void> => {
+  const auth = getAuth();
+  const userDocRef = doc(db, 'users', auth.currentUser!.uid);
   try {
     await setDoc(userDocRef, { ...user, displayName: newName });
     alert('Your display name has been successfully updated.');
@@ -142,7 +196,10 @@ export const changeUserDisplayName = async (user, newName) => {
   }
 };
 
-export const changeUserEmail = async (user, email) => {
+export const changeUserEmail = async (
+  user: User,
+  email: string
+): Promise<void> => {
   const auth = getAuth();
 
   try {
@@ -150,16 +207,20 @@ export const changeUserEmail = async (user, email) => {
       throw new Error(
         'You can not change the email address of an account created with Google!'
       );
-    await updateEmail(auth.currentUser, email);
+    await updateEmail(auth.currentUser!, email);
     alert('Your email address has been successfully updated.');
   } catch (error) {
     alert(error.message);
   }
 };
 
-export const reauthenticate = async (oldPassword, newPassword) => {
+export const reauthenticate = async (
+  oldPassword: string,
+  newPassword: string
+): Promise<void> => {
   const auth = getAuth();
   const { currentUser } = auth;
+  if (!currentUser || !currentUser.email) return;
   const { email } = currentUser;
 
   const credential = EmailAuthProvider.credential(email, oldPassword);
@@ -173,7 +234,12 @@ export const reauthenticate = async (oldPassword, newPassword) => {
   }
 };
 
-export const saveOrderToUserFirebase = async (user, order) => {
+export const saveOrderToUserFirebase = async (
+  user: User,
+  order: CategoryItem[]
+) => {
+  const auth = getAuth();
+  if (!auth || !auth.currentUser) return;
   try {
     const userDocRef = doc(db, 'users', auth.currentUser.uid);
     const userOrders = user.orderHistory;
