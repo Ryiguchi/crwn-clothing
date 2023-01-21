@@ -12,7 +12,6 @@ import {
   updatePassword,
   EmailAuthProvider,
   sendPasswordResetEmail,
-  Auth,
   User,
   NextOrObserver,
 } from 'firebase/auth';
@@ -29,10 +28,7 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore';
 import { Order } from '../../components/payment-form/payment-form.component';
-import {
-  Category,
-  CategoryItem,
-} from '../../store/categories/categories.types';
+import { Category } from '../../store/categories/categories.types';
 
 // config is form the projects page on Firebase in the settings
 const firebaseConfig = {
@@ -99,12 +95,13 @@ export type AdditionalInfo = {
   displayName?: string;
 };
 
-export type CurrentUser = {
+export type UserData = {
   displayName: string;
   email: string;
-  providerId?: string;
+  providerId: string;
   createdAt: Date;
   orderHistory: Order[];
+  id?: string;
 };
 
 // function that when given the user auth, gets a snapshot of the data
@@ -135,7 +132,7 @@ export const createUserDocumentFromAuth = async (
         ...additionalInfo,
       });
     } catch (error) {
-      console.log('Error creating user', error.message);
+      console.log('Error creating user', error);
     }
   }
 
@@ -183,7 +180,7 @@ export const getCurrentUser = (): Promise<User | null> => {
 };
 
 export const changeUserDisplayName = async (
-  user: User,
+  user: UserData,
   newName: string
 ): Promise<void> => {
   const auth = getAuth();
@@ -197,7 +194,7 @@ export const changeUserDisplayName = async (
 };
 
 export const changeUserEmail = async (
-  user: User,
+  user: UserData,
   email: string
 ): Promise<void> => {
   const auth = getAuth();
@@ -210,7 +207,7 @@ export const changeUserEmail = async (
     await updateEmail(auth.currentUser!, email);
     alert('Your email address has been successfully updated.');
   } catch (error) {
-    alert(error.message);
+    alert(error);
   }
 };
 
@@ -234,10 +231,7 @@ export const reauthenticate = async (
   }
 };
 
-export const saveOrderToUserFirebase = async (
-  user: User,
-  order: CategoryItem[]
-) => {
+export const saveOrderToUserFirebase = async (user: UserData, order: Order) => {
   const auth = getAuth();
   if (!auth || !auth.currentUser) return;
   try {
@@ -254,8 +248,7 @@ export const saveOrderToUserFirebase = async (
   }
 };
 
-export const sendResetEmail = async (email) => {
-  console.log(email);
+export const sendResetEmail = async (email: string) => {
   const auth = getAuth();
   try {
     await sendPasswordResetEmail(auth, email);

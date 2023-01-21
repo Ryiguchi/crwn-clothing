@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import Button from '../button/button.component';
 
 import { signOutStart } from '../../store/user/user.action';
-import { setIsUserMenuOpen } from '../../store/user/elements/elements.action';
+import { setIsUserMenuOpen } from '../../store/elements/elements.action';
 
-import { selectIsUserMenuOpen } from '../../store/user/elements/elements.selector';
+import { selectIsUserMenuOpen } from '../../store/elements/elements.selector';
 
 import { UserDropdownContainer, UserMenuItems } from './user-dropdown.styles';
 

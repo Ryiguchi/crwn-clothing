@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
+import { RootState } from '../store';
 
-const selectUserSlice = (state) => state.user;
+const selectUserSlice = (state: RootState) => state.user;
 
 export const selectOrderHistoryPopupItems = createSelector(
   [selectUserSlice],
@@ -19,22 +20,26 @@ export const selectUserSettingsMenu = createSelector(
 
 export const selectUserOrderHistory = createSelector(
   [selectCurrentUser],
-  (user) => user.orderHistory
+  (user) => {
+    if (user) return user.orderHistory;
+  }
 );
 
 export const selectOrderDetails = createSelector(
   [selectUserOrderHistory],
-  (orderHistory) =>
-    orderHistory.map((order) => {
-      const { date, id, amount, numItems } = order;
-      const newDate = date.slice(0, 6) + ',' + date.slice(6);
-      const orderId = `ID-${id.substring(id.length - 6).toUpperCase()}`;
-      return {
-        numItems,
-        date: newDate,
-        id,
-        orderId,
-        amount: `$${(amount / 100).toFixed(2)}`,
-      };
-    })
+  (orderHistory) => {
+    if (orderHistory)
+      return orderHistory.map((order) => {
+        const { date, id, amount, numItems } = order;
+        const newDate = date.slice(0, 6) + ',' + date.slice(6);
+        const orderId = `ID-${id.substring(id.length - 6).toUpperCase()}`;
+        return {
+          numItems,
+          date: newDate,
+          id,
+          orderId,
+          amount: `$${(amount / 100).toFixed(2)}`,
+        };
+      });
+  }
 );

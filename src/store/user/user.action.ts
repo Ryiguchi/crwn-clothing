@@ -1,5 +1,5 @@
 import { USER_ACTION_TYPES, USER_SETTINGS_MENU_OPTIONS } from './user.types';
-import { AdditionalInfo } from '../../utils/firebase/firebase.utils';
+import { AdditionalInfo, UserData } from '../../utils/firebase/firebase.utils';
 
 import {
   createAction,
@@ -10,115 +10,126 @@ import {
 import { User } from '@firebase/auth';
 import { Order } from '../../components/payment-form/payment-form.component';
 
-type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
+export type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
 
-type GoogleSignInStart = Action<USER_ACTION_TYPES.GOOGLE_SIGN_IN_START>;
+export type GoogleSignInStart = Action<USER_ACTION_TYPES.GOOGLE_SIGN_IN_START>;
 
-type EmailSignInStart = ActionWithPayload<
+export type EmailSignInStart = ActionWithPayload<
   USER_ACTION_TYPES.EMAIL_SIGN_IN_START,
   { email: string; password: string }
 >;
 
-type SignInSuccess = ActionWithPayload<USER_ACTION_TYPES.SIGN_IN_SUCCESS, User>;
+export type SignInSuccess = ActionWithPayload<
+  USER_ACTION_TYPES.SIGN_IN_SUCCESS,
+  UserData
+>;
 
-type SignInFailed = ActionWithPayload<USER_ACTION_TYPES.SIGN_IN_FAILED, Error>;
+export type SignInFailed = ActionWithPayload<
+  USER_ACTION_TYPES.SIGN_IN_FAILED,
+  Error
+>;
 
-type SignUpStart = ActionWithPayload<
+export type SignUpStart = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_UP_START,
   { email: string; password: string; displayName: string }
 >;
 
-type SignUpSuccess = ActionWithPayload<
+export type SignUpSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_UP_SUCCESSS,
   { user: User; additionalInfo: AdditionalInfo }
 >;
 
-type SignUpFailed = ActionWithPayload<USER_ACTION_TYPES.SIGN_UP_FAILED, Error>;
+export type SignUpFailed = ActionWithPayload<
+  USER_ACTION_TYPES.SIGN_UP_FAILED,
+  Error
+>;
 
-type SignOutStart = Action<USER_ACTION_TYPES.SIGN_OUT_START>;
+export type SignOutStart = Action<USER_ACTION_TYPES.SIGN_OUT_START>;
 
-type SignOutSuccess = Action<USER_ACTION_TYPES.SIGN_OUT_SUCCESS>;
+export type SignOutSuccess = Action<USER_ACTION_TYPES.SIGN_OUT_SUCCESS>;
 
-type SignOutFailed = ActionWithPayload<
+export type SignOutFailed = ActionWithPayload<
   USER_ACTION_TYPES.SIGN_OUT_FAILED,
   Error
 >;
 
-type ChangeDisplayNameStart = ActionWithPayload<
+export type ChangeDisplayNameStart = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_START,
-  { user: User; newName: string }
+  { user: UserData; newName: string }
 >;
 
-type ChangeDisplayNameSuccess = ActionWithPayload<
+export type ChangeDisplayNameSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_SUCCESS,
-  string
+  { newName: string; user: UserData }
 >;
 
-type ChangeDisplayNameFailed = ActionWithPayload<
+export type ChangeDisplayNameFailed = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_FAILED,
   Error
 >;
 
-type ChangeUserSettingsMenu = ActionWithPayload<
+export type ChangeUserSettingsMenu = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_SETTINGS_MENU,
   USER_SETTINGS_MENU_OPTIONS
 >;
 
-type ChangeUserEmailStart = ActionWithPayload<
+export type ChangeUserEmailStart = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_EMAIL_START,
-  { user: User; email: string }
+  { user: UserData; email: string }
 >;
 
-type ChangeUserEmailSuccess = ActionWithPayload<
+export type ChangeUserEmailSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_EMAIL_SUCCESS,
-  string
+  { email: string; user: UserData }
 >;
 
-type ChangeUserEmailFailed = ActionWithPayload<
+export type ChangeUserEmailFailed = ActionWithPayload<
   USER_ACTION_TYPES.SET_USER_EMAIL_FAILED,
   Error
 >;
 
-type ChangePasswordStart = ActionWithPayload<
+export type ChangePasswordStart = ActionWithPayload<
   USER_ACTION_TYPES.CHANGE_PASSWORD_START,
   { oldPassword: string; newPassword: string }
 >;
 
-type ChangePasswordSuccess = Action<USER_ACTION_TYPES.CHANGE_PASSWORD_SUCCESS>;
+export type ChangePasswordSuccess =
+  Action<USER_ACTION_TYPES.CHANGE_PASSWORD_SUCCESS>;
 
-type ChangePasswordFailed = ActionWithPayload<
+export type ChangePasswordFailed = ActionWithPayload<
   USER_ACTION_TYPES.CHANGE_PASSWORD_FAILED,
   Error
 >;
 
-type SaveOrderStart = ActionWithPayload<
+export type SaveOrderStart = ActionWithPayload<
   USER_ACTION_TYPES.SAVE_ORDER_START,
-  { user: User; order: Order }
+  { user: UserData; order: Order }
 >;
 
-type SaveOrderSuccess = ActionWithPayload<
+export type SaveOrderSuccess = ActionWithPayload<
   USER_ACTION_TYPES.SAVE_ORDER_SUCCESS,
   Order
 >;
 
-type SaveOrderFailed = ActionWithPayload<
+export type SaveOrderFailed = ActionWithPayload<
   USER_ACTION_TYPES.SAVE_ORDER_FAILED,
   Error
 >;
 
-type SetOrderHistoryPopupItems = ActionWithPayload<
+export type SetOrderHistoryPopupItems = ActionWithPayload<
   USER_ACTION_TYPES.SET_ORDER_HISTORY_POPUP_ITEMS,
   Order
 >;
 
-type ResetPasswordStart = ActionWithPayload<
+export type ResetPasswordStart = ActionWithPayload<
   USER_ACTION_TYPES.RESET_PASSWORD_START,
   string
 >;
 
-type ResetPasswordSuccess = Action<USER_ACTION_TYPES.RESET_PASSWORD_SUCCESS>;
+export type ResetPasswordSuccess =
+  Action<USER_ACTION_TYPES.RESET_PASSWORD_SUCCESS>;
 
-type ResetPasswordFailed = ActionWithPayload<
+export type ResetPasswordFailed = ActionWithPayload<
   USER_ACTION_TYPES.RESET_PASSWORD_FAILED,
   Error
 >;
@@ -137,7 +148,7 @@ export const emailSignInStart = withMatcher(
 );
 
 export const signInSuccess = withMatcher(
-  (user: User): SignInSuccess =>
+  (user: UserData): SignInSuccess =>
     createAction(USER_ACTION_TYPES.SIGN_IN_SUCCESS, user)
 );
 
@@ -179,7 +190,7 @@ export const signOutFailed = withMatcher(
 );
 
 export const changeDisplayNameStart = withMatcher(
-  (user: User, newName: string): ChangeDisplayNameStart =>
+  (user: UserData, newName: string): ChangeDisplayNameStart =>
     createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_START, {
       user,
       newName,
@@ -187,8 +198,11 @@ export const changeDisplayNameStart = withMatcher(
 );
 
 export const changeDisplayNameSuccess = withMatcher(
-  (newName: string): ChangeDisplayNameSuccess =>
-    createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_SUCCESS, newName)
+  (newName: string, user: UserData): ChangeDisplayNameSuccess =>
+    createAction(USER_ACTION_TYPES.SET_USER_DISPLAY_NAME_SUCCESS, {
+      newName,
+      user,
+    })
 );
 
 export const changeDisplayNameFailed = withMatcher(
@@ -202,13 +216,13 @@ export const changeUserSettingsMenu = withMatcher(
 );
 
 export const changeUserEmailStart = withMatcher(
-  (user: User, email: string): ChangeUserEmailStart =>
+  (user: UserData, email: string): ChangeUserEmailStart =>
     createAction(USER_ACTION_TYPES.SET_USER_EMAIL_START, { user, email })
 );
 
 export const changeUserEmailSuccess = withMatcher(
-  (email: string): ChangeUserEmailSuccess =>
-    createAction(USER_ACTION_TYPES.SET_USER_EMAIL_SUCCESS, email)
+  (email: string, user: UserData): ChangeUserEmailSuccess =>
+    createAction(USER_ACTION_TYPES.SET_USER_EMAIL_SUCCESS, { email, user })
 );
 
 export const changeUserEmailFailed = withMatcher(
@@ -235,7 +249,7 @@ export const changePasswordFailed = withMatcher(
 );
 
 export const saveOrderStart = withMatcher(
-  (user: User, order: Order): SaveOrderStart =>
+  (user: UserData, order: Order): SaveOrderStart =>
     createAction(USER_ACTION_TYPES.SAVE_ORDER_START, { user, order })
 );
 

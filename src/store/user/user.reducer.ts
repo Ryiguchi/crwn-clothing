@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { Order } from '../../components/payment-form/payment-form.component';
-import { CurrentUser } from '../../utils/firebase/firebase.utils';
+import { UserData } from '../../utils/firebase/firebase.utils';
 import { USER_SETTINGS_MENU_OPTIONS } from './user.types';
 import {
   signInSuccess,
@@ -21,11 +21,11 @@ import {
 } from './user.action';
 
 export type UserState = {
-  currentUser: CurrentUser | null;
-  isLoading: boolean;
-  error: Error | null;
-  userSettingsMenu: USER_SETTINGS_MENU_OPTIONS;
-  orderHistoryPopupItems: Order | null;
+  readonly currentUser: UserData | null;
+  readonly isLoading: boolean;
+  readonly error: Error | null;
+  readonly userSettingsMenu: USER_SETTINGS_MENU_OPTIONS;
+  readonly orderHistoryPopupItems: Order | null;
 };
 
 const INITIAL_USER_STATE: UserState = {
@@ -70,21 +70,23 @@ export const userReducer = (state = INITIAL_USER_STATE, action: AnyAction) => {
   }
 
   if (changeDisplayNameSuccess.match(action)) {
+    const { newName, user } = action.payload;
     return {
       ...state,
       currentUser: {
-        ...state.currentUser,
-        displayName: action.payload,
+        ...user,
+        displayName: newName,
       },
     };
   }
 
   if (changeUserEmailSuccess.match(action)) {
+    const { email, user } = action.payload;
     return {
       ...state,
       currentUser: {
-        ...state.currentUser,
-        email: action.payload,
+        ...user,
+        email: email,
       },
     };
   }
@@ -97,12 +99,13 @@ export const userReducer = (state = INITIAL_USER_STATE, action: AnyAction) => {
   }
 
   if (saveOrderSuccess.match(action) && state.currentUser) {
+    const curUser = {
+      ...state.currentUser,
+      orderHistory: [...state.currentUser.orderHistory, action.payload],
+    };
     return {
       ...state,
-      currentUser: {
-        ...state.currentUser,
-        orderHistory: [...state.currentUser.orderHistory, action.payload],
-      },
+      currentUser: curUser,
     };
   }
 

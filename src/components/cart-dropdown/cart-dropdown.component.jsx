@@ -6,9 +6,8 @@ import Button from '../button/button.component';
 import CartItem from '../cart-item/cart-item.component';
 
 import { selectCartItems } from '../../store/cart/cart.selectors';
-import { selectIsCartOpen } from '../../store/user/elements/elements.selector';
 
-import { setIsCartOpen } from '../../store/user/elements/elements.action';
+import { setIsCartOpen } from '../../store/elements/elements.action';
 
 import {
   CartDropdownContainer,

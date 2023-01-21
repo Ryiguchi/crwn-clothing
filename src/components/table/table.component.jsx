@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import { useTable, usePagination } from 'react-table';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
-import { selectCurrentUser } from '../../store/user/user.selector';
+// import { selectCurrentUser } from '../../store/user/user.selector';
 
 import {
   TableHeader,
@@ -19,8 +19,8 @@ import { CaretLeft, CaretRight } from 'phosphor-react';
 
 const Table = ({ data, columns }) => {
   const [activePage, setActivePage] = useState(0);
-  const currentUser = useSelector(selectCurrentUser);
-  const { orderHistory } = currentUser;
+  // const currentUser = useSelector(selectCurrentUser);
+  // const { orderHistory } = currentUser;
   const {
     getTableProps, // table props from react-table
     getTableBodyProps, // table body props from react-table

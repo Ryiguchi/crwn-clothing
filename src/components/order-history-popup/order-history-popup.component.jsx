@@ -2,10 +2,9 @@ import { useDispatch } from 'react-redux';
 
 import CartItem from '../cart-item/cart-item.component';
 
-import { setIsOrderHistoryPopupOpen } from '../../store/user/elements/elements.action';
+import { setIsOrderHistoryPopupOpen } from '../../store/elements/elements.action';
 
 import { PopupContainer, StyledX } from './order-history-popup.styles';
-import { X } from 'phosphor-react';
 
 const OrderHistoryPopup = ({ items }) => {
   const { amount, date, id } = items;

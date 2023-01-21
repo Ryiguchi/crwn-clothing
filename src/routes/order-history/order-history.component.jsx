@@ -9,10 +9,10 @@ import {
   selectOrderHistoryPopupItems,
   selectCurrentUser,
 } from '../../store/user/user.selector';
-import { selectIsOrderHistoryPopupOpen } from '../../store/user/elements/elements.selector';
+import { selectIsOrderHistoryPopupOpen } from '../../store/elements/elements.selector';
 
 import { setOrderHistoryPopupItems } from '../../store/user/user.action';
-import { setIsOrderHistoryPopupOpen } from '../../store/user/elements/elements.action';
+import { setIsOrderHistoryPopupOpen } from '../../store/elements/elements.action';
 
 import { TableContainer, StyledTable } from './order-history.styles';
 import { DotsThreeVertical } from 'phosphor-react';

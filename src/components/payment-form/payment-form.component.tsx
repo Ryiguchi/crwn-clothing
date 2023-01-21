@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -16,16 +16,17 @@ import {
   PaymentFormContainer,
   FormContainer,
   PaymentButton,
-} from './payment-form.styles';´
+} from './payment-form.styles';
+import { CartItem } from '../../store/cart/cart.types';
 
 export type Order = {
   id: string;
-  amount: Number;
+  amount: number;
   date: string;
-  timestamp: Number;
-  numItems: Number;
-  orderItems: CartItem[]
-}
+  timestamp: number;
+  numItems: number;
+  orderItems: CartItem[];
+};
 
 const PaymentForm = () => {
   const dispatch = useDispatch();
@@ -40,10 +41,11 @@ const PaymentForm = () => {
 
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  const paymentHandler = async (e) => {
+  const paymentHandler = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     // prevent default form behavior
     e.preventDefault();
-    console.log(currentUser.email);
 
     // check to make sure there is a registered instance of stripe and elements
     if (!stripe || !elements) return;
@@ -59,15 +61,23 @@ const PaymentForm = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         amount: amount * 100,
-        email: currentUser.email,
+        email: currentUser?.email,
       }),
     }).then((res) => res.json());
 
     const clientSecret = response.paymentIntent.client_secret;
 
+    const cardDetails = elements.getElement(CardElement);
+    if (!cardDetails) {
+      alert(
+        'There was a problem reading your card details.  Please try again.'
+      );
+      return;
+    }
+
     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
-        card: elements.getElement(CardElement),
+        card: cardDetails,
         billing_details: {
           name: currentUser ? currentUser.displayName : 'guest',
         },
@@ -95,7 +105,9 @@ const PaymentForm = () => {
           orderItems: cartItems,
         };
 
-        dispatch(saveOrderStart(currentUser, order));
+        if (currentUser) {
+          dispatch(saveOrderStart(currentUser, order));
+        }
       }
     }
   };

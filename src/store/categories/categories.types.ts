@@ -7,6 +7,16 @@ export enum CATEGORIES_ACTION_TYPES {
 export type CategoryItem = {
   imageUrl: string;
   name: string;
-  price: string;
+  price: number;
   id: number;
+};
+
+export type Category = {
+  title: string;
+  imageUrl: string;
+  items: CategoryItem[];
+};
+
+export type CategoryMap = {
+  [key: string]: CategoryItem[];
 };
