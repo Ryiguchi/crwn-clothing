@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { selectCurrentUser } from '../../store/user/user.selector';
@@ -7,8 +7,6 @@ import { changePasswordStart } from '../../store/user/user.action';
 
 import FormInput from '../form-input/form-input.component';
 import { StyledButton, Form } from '../change-name/change.name.styles';
-
-import { getAuth, reauthenticateWithCredential } from 'firebase/auth';
 
 const initialFormFieldValue = {
   oldPassword: '',
@@ -23,7 +21,7 @@ const ChangePassword = () => {
 
   const { oldPassword, newPassword, confirmPassword } = formFields;
 
-  const changePassword = (e) => {
+  const changePassword = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       alert('Passwords don"t match');
@@ -32,13 +30,12 @@ const ChangePassword = () => {
     dispatch(changePasswordStart(oldPassword, newPassword));
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setFormFields({ ...formFields, [name]: value });
   };
 
-  if (!currentUser) return;
   return (
     <>
       <Form onSubmit={changePassword}>

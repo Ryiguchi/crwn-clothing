@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
@@ -30,13 +30,13 @@ const SignInForm = () => {
     setFormFields(defaultFormFields);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       dispatch(emailSignInStart(email, password));
       resetFormFields();
-    } catch (err) {
+    } catch (err: any) {
       if (err.code === 'auth/wrong-password') {
         alert('The password you entered is incorrect');
         return;
@@ -47,7 +47,7 @@ const SignInForm = () => {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormFields({ ...formFields, [name]: value });
   };

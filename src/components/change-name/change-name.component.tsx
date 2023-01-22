@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
@@ -19,20 +19,21 @@ const ChangeName = () => {
 
   const { name } = formField;
 
-  const changeDisplayName = (e) => {
+  const changeDisplayName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(changeDisplayNameStart(currentUser, name));
+    if (currentUser) {
+      dispatch(changeDisplayNameStart(currentUser, name));
+    }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target);
-    const { name, value } = e.target;
+    const { value } = e.target;
 
-    setFormField({ [name]: value });
+    setFormField({ name: value });
   };
 
-  if (!currentUser) return;
   return (
     <>
       <Form onSubmit={changeDisplayName}>

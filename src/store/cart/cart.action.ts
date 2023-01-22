@@ -1,10 +1,12 @@
 // helper functions
+import { CartItems } from '../../components/cart-dropdown/cart-dropdown.styles';
 import {
   createAction,
   ActionWithPayload,
   withMatcher,
 } from '../../utils/reducer.utils';
 import { CategoryItem } from '../categories/categories.types';
+import { selectCartItems } from './cart.selectors';
 import { CART_ACTION_TYPES, CartItem } from './cart.types';
 
 export type CartAction<T> = (cartItems: CartItem[], product: T) => CartItem[];
@@ -45,34 +47,40 @@ const clearCartItem: CartAction<CartItem> = (cartItems, cartItemToClear) => {
   return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 };
 
-type SetCartItems = ActionWithPayload<
+export type SetCartItems = ActionWithPayload<
   CART_ACTION_TYPES.SET_CART_ITEMS,
   CartItem[]
 >;
 
+export const setCartItems = withMatcher(
+  (cartItems: CartItem[]): SetCartItems =>
+    createAction(CART_ACTION_TYPES.SET_CART_ITEMS, cartItems)
+);
+
 // type ClearCart = ActionWithPayload<CART_ACTION_TYPES.SET_CART_ITEMS, []>;
 
-export const addItemToCart = withMatcher(
-  (cartItems: CartItem[], productToAdd: CategoryItem): SetCartItems => {
-    const newCartItems = addCartItem(cartItems, productToAdd);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-  }
-);
+export const addItemToCart = (
+  cartItems: CartItem[],
+  productToAdd: CategoryItem
+) => {
+  const newCartItems = addCartItem(cartItems, productToAdd);
+  return setCartItems(newCartItems);
+};
 
-export const removeItemFromCart = withMatcher(
-  (cartItems: CartItem[], cartItemToRemove: CartItem): SetCartItems => {
-    const newCartItems = removeCartItem(cartItems, cartItemToRemove);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-  }
-);
+export const removeItemFromCart = (
+  cartItems: CartItem[],
+  cartItemToRemove: CartItem
+) => {
+  const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+  return setCartItems(newCartItems);
+};
 
-export const clearItemFromCart = withMatcher(
-  (cartItems: CartItem[], cartItemToClear: CartItem): SetCartItems => {
-    const newCartItems = clearCartItem(cartItems, cartItemToClear);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-  }
-);
+export const clearItemFromCart = (
+  cartItems: CartItem[],
+  cartItemToClear: CartItem
+) => {
+  const newCartItems = clearCartItem(cartItems, cartItemToClear);
+  return setCartItems(newCartItems);
+};
 
-export const clearCart = withMatcher(
-  (): SetCartItems => createAction(CART_ACTION_TYPES.SET_CART_ITEMS, [])
-);
+export const clearCart = () => setCartItems([]);

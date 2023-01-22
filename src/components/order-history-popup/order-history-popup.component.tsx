@@ -5,11 +5,16 @@ import CartItem from '../cart-item/cart-item.component';
 import { setIsOrderHistoryPopupOpen } from '../../store/elements/elements.action';
 
 import { PopupContainer, StyledX } from './order-history-popup.styles';
+import { FC } from 'react';
+import { Order } from '../payment-form/payment-form.component';
 
-const OrderHistoryPopup = ({ items }) => {
+type OrderHistoryPopupProps = {
+  items: Order;
+};
+
+const OrderHistoryPopup: FC<OrderHistoryPopupProps> = ({ items }) => {
   const { amount, date, id } = items;
   const orderId = `ID-${id.substring(id.length - 6).toUpperCase()}`;
-  console.log(items);
   const dispatch = useDispatch();
 
   const closePopup = () => dispatch(setIsOrderHistoryPopupOpen(false));
@@ -22,7 +27,7 @@ const OrderHistoryPopup = ({ items }) => {
         <div>{`OrderDate: ${date}`}</div>
         <div>
           {items.orderItems.map((item) => (
-            <CartItem key={item.id} cartItem={item} type="orderHistory" />
+            <CartItem key={item.id} cartItem={item} />
           ))}
         </div>
         <div>{`Total: $${(amount / 100).toFixed(2)}`}</div>

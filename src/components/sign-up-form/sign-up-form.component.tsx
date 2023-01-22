@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
@@ -25,7 +25,7 @@ const SignUpForm = () => {
     setFormFields(defaultFormFields);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert('Passwords don"t match');
@@ -35,14 +35,14 @@ const SignUpForm = () => {
       dispatch(signUpStart(email, password, displayName));
 
       resetFormFields();
-    } catch (err) {
+    } catch (err: any) {
       if (err.code === 'auth/email-already-in-use') {
         alert(`An account already exists with ${email}`);
       } else console.log('Error creating user', err.message);
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     // spread in the whole object and then modify one value []
     setFormFields({ ...formFields, [name]: value });

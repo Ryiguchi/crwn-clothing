@@ -17,6 +17,13 @@ import { setIsOrderHistoryPopupOpen } from '../../store/elements/elements.action
 import { TableContainer, StyledTable } from './order-history.styles';
 import { DotsThreeVertical } from 'phosphor-react';
 
+export type TColumns = {
+  Header: string;
+  accessor?: string;
+  id?: string;
+  cell?: () => JSX.Element;
+};
+
 const OrderHistory = () => {
   const dispatch = useDispatch();
 
@@ -32,36 +39,39 @@ const OrderHistory = () => {
     dispatch(setIsOrderHistoryPopupOpen(true));
   };
 
-  const columns = useMemo(() => [
-    {
-      Header: 'Purchase date:',
-      accessor: 'date',
-    },
-    {
-      Header: 'Order id:',
-      accessor: 'orderId',
-    },
-    {
-      Header: '# of items:',
-      accessor: 'numItems',
-    },
-    {
-      Header: 'Total:',
-      accessor: `amount`,
-    },
-    {
-      Header: '',
-      id: `icon`,
-      Cell: () => (
-        <DotsThreeVertical
-          onClick={doSomething}
-          size={20}
-          color="#363636"
-          weight="bold"
-        />
-      ),
-    },
-  ]);
+  const columns: TColumns[] = useMemo(
+    () => [
+      {
+        Header: 'Purchase date:',
+        accessor: 'date',
+      },
+      {
+        Header: 'Order id:',
+        accessor: 'orderId',
+      },
+      {
+        Header: '# of items:',
+        accessor: 'numItems',
+      },
+      {
+        Header: 'Total:',
+        accessor: `amount`,
+      },
+      {
+        Header: '',
+        id: `icon`,
+        Cell: () => (
+          <DotsThreeVertical
+            onClick={doSomething}
+            size={20}
+            color="#363636"
+            weight="bold"
+          />
+        ),
+      },
+    ],
+    []
+  );
 
   if (!data) return;
   if (!user) return;

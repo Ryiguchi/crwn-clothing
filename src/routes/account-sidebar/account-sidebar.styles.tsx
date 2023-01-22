@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
-import { Link } from 'react-router-dom';
-
 import { ReactComponent as CaretRightIcon } from '../../assets/caret-right.svg';
+import { USER_SETTINGS_MENU_OPTIONS } from '../../store/user/user.types';
 
 export const MenuContainer = styled.div`
   display: flex;
@@ -14,7 +13,12 @@ export const MenuContainer = styled.div`
   margin-top: 60px;
 `;
 
-export const MenuItem = styled(Link)`
+type MenuItemProps = {
+  name: USER_SETTINGS_MENU_OPTIONS;
+  activemenu: USER_SETTINGS_MENU_OPTIONS;
+};
+
+export const MenuItem = styled.div<MenuItemProps>`
   display: flex;
   align-items: center;
   justify-content: space-between;

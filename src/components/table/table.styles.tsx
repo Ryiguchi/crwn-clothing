@@ -70,12 +70,17 @@ export const PagList = styled.ul`
   gap: 10px;
 `;
 
-export const PagNum = styled.li`
+type PagNumProps = {
+  active: number;
+  elId: number;
+};
+
+export const PagNum = styled.li<PagNumProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
-  border: ${(props) => (props.active === props.id ? '1px solid #aaa' : '')};
+  border: ${(props) => (props.active === props.elId ? '1px solid #aaa' : '')};
   cursor: pointer;
 `;

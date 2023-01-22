@@ -27,7 +27,6 @@ const CartDropdown = () => {
     navigate('/checkout');
   };
 
-  // if (!isCartOpen) return;
   return (
     <CartDropdownContainer>
       <CartItems />

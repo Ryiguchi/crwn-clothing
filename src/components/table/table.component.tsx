@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 
-import { useTable, usePagination } from 'react-table';
+import { useTable, usePagination, Column } from 'react-table';
+
+import { TColumns } from '../../routes/order-history/order-history.component';
 // import { useSelector } from 'react-redux';
 
 // import { selectCurrentUser } from '../../store/user/user.selector';
@@ -16,8 +18,14 @@ import {
 } from './table.styles';
 
 import { CaretLeft, CaretRight } from 'phosphor-react';
+import { Order } from '../payment-form/payment-form.component';
 
-const Table = ({ data, columns }) => {
+type TableProps = {
+  data: Order[];
+  columns: ReadonlyArray<Column<Order>>;
+};
+
+const Table: FC<TableProps> = ({ data, columns }) => {
   const [activePage, setActivePage] = useState(0);
   // const currentUser = useSelector(selectCurrentUser);
   // const { orderHistory } = currentUser;
@@ -25,8 +33,8 @@ const Table = ({ data, columns }) => {
     getTableProps, // table props from react-table
     getTableBodyProps, // table body props from react-table
     headerGroups, // headerGroups, if your table has groupings
-    page, // rows for the table based on the data passed
     prepareRow,
+    page, // rows for the table based on the data passed
     canPreviousPage,
     canNextPage,
     pageCount,
@@ -37,13 +45,12 @@ const Table = ({ data, columns }) => {
     { columns, data, initialState: { pageSize: 5, pageIndex: 0 } },
     usePagination
   );
-
   const getPagination = () => {
-    let markup = [];
+    let markup: JSX.Element[] = [];
     for (let i = 0; i < pageCount; i++) {
       markup.push(
         <PagNum
-          id={i}
+          elId={i}
           key={i + 1}
           active={activePage}
           onClick={() => {
@@ -58,11 +65,20 @@ const Table = ({ data, columns }) => {
     return markup;
   };
 
-  const changePage = (page) => {
-    if (page === 'next' && activePage !== pageCount - 1) {
+  enum PAGE_VALUES {
+    next = 'next',
+    previous = 'previous',
+  }
+
+  const changePage = (page: PAGE_VALUES) => {
+    if (
+      page === PAGE_VALUES.next &&
+      activePage !== pageCount - 1 &&
+      canNextPage
+    ) {
       setActivePage(activePage + 1);
     }
-    if (page === 'previous' && activePage !== 0) {
+    if (page === PAGE_VALUES.previous && activePage !== 0 && canPreviousPage) {
       setActivePage(activePage - 1);
     }
   };
@@ -89,7 +105,7 @@ const Table = ({ data, columns }) => {
               <TableRow {...row.getRowProps()}>
                 {row.cells.map((cell) => {
                   return (
-                    <TableData id={i} {...cell.getCellProps()}>
+                    <TableData id={i.toString()} {...cell.getCellProps()}>
                       {cell.render('Cell')}
                     </TableData>
                   );
@@ -106,20 +122,18 @@ const Table = ({ data, columns }) => {
             size={24}
             color="#363636"
             onClick={() => {
-              changePage('previous');
+              changePage(PAGE_VALUES.previous);
               previousPage();
             }}
-            disabled={!canPreviousPage}
           />
           {getPagination()}
           <CaretRight
             size={24}
             color="#363636"
             onClick={() => {
-              changePage('next');
+              changePage(PAGE_VALUES.next);
               nextPage();
             }}
-            disabled={!canNextPage}
           />
         </PagList>
         {/* <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
