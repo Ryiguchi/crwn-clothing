@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { MouseEvent, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Column } from 'react-table';
 
 import OrderHistoryPopup from '../../components/order-history-popup/order-history-popup.component';
 
@@ -16,12 +17,14 @@ import { setIsOrderHistoryPopupOpen } from '../../store/elements/elements.action
 
 import { TableContainer, StyledTable } from './order-history.styles';
 import { DotsThreeVertical } from 'phosphor-react';
+import { Order } from '../../components/payment-form/payment-form.component';
 
-export type TColumns = {
-  Header: string;
-  accessor?: string;
-  id?: string;
-  cell?: () => JSX.Element;
+export type OrderData = {
+  numItems: number;
+  date: string;
+  id: string;
+  orderId: string;
+  amount: string;
 };
 
 const OrderHistory = () => {
@@ -31,15 +34,20 @@ const OrderHistory = () => {
   const data = useSelector(selectOrderDetails);
   const orderHistory = useSelector(selectUserOrderHistory);
   const isOrderHistoryPopupOpen = useSelector(selectIsOrderHistoryPopupOpen);
-  const orderHistoryPopupItems = useSelector(selectOrderHistoryPopupItems);
+  const orderHistoryPopupItems = useSelector(
+    selectOrderHistoryPopupItems
+  ) as Order;
 
-  const doSomething = (e) => {
-    const index = e.target.parentElement.id;
-    dispatch(setOrderHistoryPopupItems(orderHistory[index]));
-    dispatch(setIsOrderHistoryPopupOpen(true));
+  const doSomething = (e: MouseEvent<SVGSVGElement>) => {
+    const target = e.target as HTMLTableCellElement;
+    const index = +target.parentElement!.id;
+    if (orderHistory) {
+      dispatch(setOrderHistoryPopupItems(orderHistory[index]));
+      dispatch(setIsOrderHistoryPopupOpen(true));
+    }
   };
 
-  const columns: TColumns[] = useMemo(
+  const columns: ReadonlyArray<Column<OrderData>> = useMemo(
     () => [
       {
         Header: 'Purchase date:',

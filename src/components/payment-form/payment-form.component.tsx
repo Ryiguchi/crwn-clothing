@@ -96,7 +96,7 @@ const PaymentForm = () => {
         const date = dateObj.toString().slice(4, 15);
         const timestamp = Date.now();
 
-        const order = {
+        const order: Order = {
           id,
           amount,
           date,

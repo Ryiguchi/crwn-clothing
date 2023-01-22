@@ -12,10 +12,16 @@ import {
 
 import { CategoryContainer, CategoryTitleH2 } from './category.styles';
 
+type CategoryRouteParams = {
+  category: string;
+};
+
 const Category = () => {
   const categoriesMap = useSelector(selectCategoriesMap);
   const isLoading = useSelector(selectIsCategoriesIsLoading);
-  const { category } = useParams();
+  const { category } = useParams<
+    keyof CategoryRouteParams
+  >() as CategoryRouteParams;
   const [products, setProducts] = useState(categoriesMap[category]);
 
   useEffect(() => {

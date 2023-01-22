@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 
 import { useTable, usePagination, Column } from 'react-table';
 
-import { TColumns } from '../../routes/order-history/order-history.component';
+import { OrderData } from '../../routes/order-history/order-history.component';
 // import { useSelector } from 'react-redux';
 
 // import { selectCurrentUser } from '../../store/user/user.selector';
@@ -18,11 +18,10 @@ import {
 } from './table.styles';
 
 import { CaretLeft, CaretRight } from 'phosphor-react';
-import { Order } from '../payment-form/payment-form.component';
 
 type TableProps = {
-  data: Order[];
-  columns: ReadonlyArray<Column<Order>>;
+  data: OrderData[];
+  columns: ReadonlyArray<Column<OrderData>>;
 };
 
 const Table: FC<TableProps> = ({ data, columns }) => {
