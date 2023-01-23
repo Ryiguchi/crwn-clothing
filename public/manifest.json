@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "CRWN Clothing",
+  "name": "CRWN Clothing by Ryan",
   "icons": [
     {
       "src": "favicon.webp",
@@ -10,12 +10,14 @@
     {
       "src": "logo192.webp",
       "type": "image/webp",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.webp",
       "type": "image/webp",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",
