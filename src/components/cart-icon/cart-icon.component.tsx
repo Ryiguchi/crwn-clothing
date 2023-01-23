@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCartCount } from '../../store/cart/cart.selectors';
@@ -12,7 +13,10 @@ const CartIcon = () => {
   const isCartOpen = useSelector(selectIsCartOpen);
   const cartCount = useSelector(selectCartCount);
 
-  const toggleIsCartOpen = () => dispatch(setIsCartOpen(!isCartOpen));
+  const toggleIsCartOpen = useCallback(
+    () => dispatch(setIsCartOpen(!isCartOpen)),
+    [isCartOpen]
+  );
 
   return (
     <CartIconContainer onClick={toggleIsCartOpen}>

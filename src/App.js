@@ -1,19 +1,31 @@
-import { useEffect } from 'react';
+import { lazy, useEffect, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import Home from './routes/home/home.component';
-import Navigation from './routes/navigation/navigation.component';
-import Authentication from './routes/authentication/authentication.component';
-import Shop from './routes/shop/shop.component';
-import Checkout from './routes/checkout/checkout.component';
-import AccountSettings from './routes/account-settings/account-settings.component';
-import OrderHistory from './routes/order-history/order-history.component';
-import ForgotPassword from './routes/forgot-password/forgot-password.component';
+import Spinner from './components/spinner/spinner.component';
 
 import { checkUserSession } from './store/user/user.action';
 
 import { GlobalStyle } from './global.styles';
+
+const Home = lazy(() => import('./routes/home/home.component'));
+const Navigation = lazy(() =>
+  import('./routes/navigation/navigation.component')
+);
+const Authentication = lazy(() =>
+  import('./routes/authentication/authentication.component')
+);
+const Shop = lazy(() => import('./routes/shop/shop.component'));
+const Checkout = lazy(() => import('./routes/checkout/checkout.component'));
+const AccountSettings = lazy(() =>
+  import('./routes/account-settings/account-settings.component')
+);
+const OrderHistory = lazy(() =>
+  import('./routes/order-history/order-history.component')
+);
+const ForgotPassword = lazy(() =>
+  import('./routes/forgot-password/forgot-password.component')
+);
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,17 +37,19 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Routes>
-        <Route path="/" element={<Navigation />}>
-          <Route index element={<Home />} />
-          <Route path="shop/*" element={<Shop />} />
-          <Route path="auth" element={<Authentication />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="account" element={<AccountSettings />} />
-          <Route path="history" element={<OrderHistory />} />
-          <Route path="forgot" element={<ForgotPassword />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<Spinner />}>
+        <Routes>
+          <Route path="/" element={<Navigation />}>
+            <Route index element={<Home />} />
+            <Route path="shop/*" element={<Shop />} />
+            <Route path="auth" element={<Authentication />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="account" element={<AccountSettings />} />
+            <Route path="history" element={<OrderHistory />} />
+            <Route path="forgot" element={<ForgotPassword />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </>
   );
 };

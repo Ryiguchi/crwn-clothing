@@ -1,7 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { selectCurrentUser } from '../../store/user/user.selector';
+import { useDispatch } from 'react-redux';
 
 import { changePasswordStart } from '../../store/user/user.action';
 
@@ -17,7 +15,6 @@ const initialFormFieldValue = {
 const ChangePassword = () => {
   const dispatch = useDispatch();
   const [formFields, setFormFields] = useState(initialFormFieldValue);
-  const currentUser = useSelector(selectCurrentUser);
 
   const { oldPassword, newPassword, confirmPassword } = formFields;
 

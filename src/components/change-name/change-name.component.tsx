@@ -28,7 +28,6 @@ const ChangeName = () => {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target);
     const { value } = e.target;
 
     setFormField({ name: value });

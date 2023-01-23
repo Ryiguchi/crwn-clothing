@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import { useTable, usePagination, Column } from 'react-table';
 
@@ -44,7 +44,7 @@ const Table: FC<TableProps> = ({ data, columns }) => {
     { columns, data, initialState: { pageSize: 5, pageIndex: 0 } },
     usePagination
   );
-  const getPagination = () => {
+  const getPagination = useCallback(() => {
     let markup: JSX.Element[] = [];
     for (let i = 0; i < pageCount; i++) {
       markup.push(
@@ -62,7 +62,7 @@ const Table: FC<TableProps> = ({ data, columns }) => {
       );
     }
     return markup;
-  };
+  }, [activePage]);
 
   enum PAGE_VALUES {
     next = 'next',
