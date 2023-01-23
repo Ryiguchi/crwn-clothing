@@ -9,6 +9,10 @@ export const Form = styled.form`
   width: 500px;
   height: 300px;
   padding: 20px;
+
+  @media screen and (max-width: 800px) {
+    width: 60%;
+  }
 `;
 
 export const StyledButton = styled(Button)`

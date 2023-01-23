@@ -8,6 +8,10 @@ export const PopupContainer = styled.div`
   border: 1px solid #aaa;
   padding: 20px;
   margin: 20px auto;
+
+  @media screen and (max-width: 450px) {
+    width: 85%;
+  }
 `;
 
 export const StyledX = styled(X)`

@@ -11,6 +11,10 @@ export const MenuContainer = styled.div`
   width: 250px;
 
   margin-top: 60px;
+
+  @media screen and (max-width: 800px) {
+    width: 40%;
+  }
 `;
 
 type MenuItemProps = {
@@ -29,6 +33,10 @@ export const MenuItem = styled.div<MenuItemProps>`
 
   border-left: ${(props) =>
     props.name === props.activemenu ? '2px solid #000' : '2px solid #fff'};
+
+  @media screen and (max-width: 800px) {
+    padding: 20px 10px;
+  }
 `;
 
 export const StyledCaretIcon = styled(CaretRightIcon)``;

@@ -18,6 +18,7 @@ export const Body = styled.div`
   padding: 0 25px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   align-items: center;
   justify-content: center;
   border: 1px solid black;
@@ -28,7 +29,7 @@ export const Body = styled.div`
   h2 {
     text-transform: uppercase;
     font-weight: bold;
-    margin: 0 6px 0;
+    margin: 0 6px;
     font-size: 22px;
     color: #222;
   }
@@ -36,6 +37,16 @@ export const Body = styled.div`
   p {
     font-weight: lighter;
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 800px) {
+    padding: 10px;
+    width: 130px;
+    height: 80px;
+
+    h2 {
+      font-size: 20px;
+    }
   }
 `;
 
@@ -69,5 +80,9 @@ export const DirectoryItemContainer = styled.div`
 
   &:last-child {
     margin-left: 7.5px;
+  }
+
+  @media screen and (max-width: 800px) {
+    height: 220px;
   }
 `;
