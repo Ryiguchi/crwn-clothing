@@ -1,5 +1,3 @@
-import { Order } from '../../components/payment-form/payment-form.component';
-
 export enum USER_ACTION_TYPES {
   SET_CURRRET_USER = 'user/SET-CURRENT-USER',
   CHECK_USER_SESSION = 'user/CHECK_USER_SESSION',

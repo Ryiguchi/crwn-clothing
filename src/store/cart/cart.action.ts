@@ -1,12 +1,10 @@
 // helper functions
-import { CartItems } from '../../components/cart-dropdown/cart-dropdown.styles';
 import {
   createAction,
   ActionWithPayload,
   withMatcher,
 } from '../../utils/reducer.utils';
 import { CategoryItem } from '../categories/categories.types';
-import { selectCartItems } from './cart.selectors';
 import { CART_ACTION_TYPES, CartItem } from './cart.types';
 
 export type CartAction<T> = (cartItems: CartItem[], product: T) => CartItem[];

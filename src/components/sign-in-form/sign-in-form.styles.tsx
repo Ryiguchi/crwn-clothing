@@ -14,6 +14,24 @@ export const SignInContainer = styled.div`
   span:nth-child(4) {
     font-size: 12px;
   }
+
+  @media screen and (max-width: 450px) {
+    width: 100%;
+
+    h2 {
+      font-size: 20px;
+    }
+
+    span:nth-child(4) {
+      display: block;
+      text-align: center;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+    }
+  }
 `;
 
 export const ButtonsContainer = styled.div`

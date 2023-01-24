@@ -28,9 +28,9 @@ export const BaseButton = styled.button`
   }
 
   @media screen and (max-width: 450px) {
-    padding: 10px 0;
-    min-width: 120px;
-    font-size: 14px;
+    padding: 10px;
+    min-width: 100px;
+    font-size: 12px;
   }
 `;
 
